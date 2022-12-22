@@ -22,7 +22,7 @@ function manhattan_optimal_kmenas(points, I, J, D)
 
     max_d = maximum(manhattan_distance(points))
 
-    set_optimizer_attribute(model, "TimeLimit", 300)
+    #set_optimizer_attribute(model, "TimeLimit", 300)
 
     @variable(model, gamma[1:J]);
     @variable(model, z[1:J, 1:I],Bin);
@@ -37,7 +37,7 @@ function manhattan_optimal_kmenas(points, I, J, D)
     @constraint(model, [i=1:I, j=1:J, d=1:D], y[j,d,i] >= x[i,d] - points[j,d]);
     @constraint(model, [i=1:I, j=1:J, d=1:D], y[j,d,i] >= -(x[i,d] - points[j,d]));
 
-    @constraint(model, [i=1:I, j=1:J], amma[j]>= r[j,i]-mu[j,i]);
+    @constraint(model, [i=1:I, j=1:J], gamma[j]>= r[j,i]-mu[j,i]);
 
     @constraint(model, [i = 1:I, j = 1:J], max_d*(1-z[j,i]) >= mu[j,i]);
 
@@ -196,68 +196,79 @@ end
 # D is the dimensionality of the points (number of features)
 # # """
 
-dim3_optimal_performance = []
-dim3_warm_start_performance = []
+# dim3_optimal_performance = []
+# dim3_warm_start_performance = []
 
-for J in [20,50,100,300,500]
-    for I in [2,3,4,5]
-        for D = 3
-            points = generate_points(I,J,D, ones(I));
-            centroids, assignment, obj_value = euclidean_optimal_kmenas(points, I,J,D);
-            push!(dim3_optimal_performance, mean_silhouette_score(assignment, counts(assignment), points))
-            centroids, assignment, obj_value = euclidean_warm_start(points, I,J,D);
-            push!(dim3_warm_start_performance, mean_silhouette_score(assignment, counts(assignment), points))
-        end
-    end
-end
+# for J in [20,50,100,300,500]
+#     for I in [2,3,4,5]
+#         for D = 3
+#             points = generate_points(I,J,D, ones(I));
+#             centroids, assignment, obj_value = euclidean_optimal_kmenas(points, I,J,D);
+#             push!(dim3_optimal_performance, mean_silhouette_score(assignment, counts(assignment), points))
+#             centroids, assignment, obj_value = euclidean_warm_start(points, I,J,D);
+#             push!(dim3_warm_start_performance, mean_silhouette_score(assignment, counts(assignment), points))
+#         end
+#     end
+# end
 
-dim3_optimal_performance = rename!(DataFrame(reshape(dim3_optimal_performance, (4,5)), :auto),:x1 => :"20", :x2 => :"50", :x3 => :"100", :x4 => :"300", :x5 => :"500")
-dim3_optimal_performance[!,:centers] = ["2","3","4","5"];
+# dim3_optimal_performance = rename!(DataFrame(reshape(dim3_optimal_performance, (4,5)), :auto),:x1 => :"20", :x2 => :"50", :x3 => :"100", :x4 => :"300", :x5 => :"500")
+# dim3_optimal_performance[!,:centers] = ["2","3","4","5"];
 
-dim3_warm_start_performance = rename!(DataFrame(reshape(dim3_warm_start_performance, (4,5)), :auto),:x1 => :"20", :x2 => :"50", :x3 => :"100", :x4 => :"300", :x5 => :"500")
-dim3_warm_start_performance[!,:centers] = ["2","3","4","5"];
+# dim3_warm_start_performance = rename!(DataFrame(reshape(dim3_warm_start_performance, (4,5)), :auto),:x1 => :"20", :x2 => :"50", :x3 => :"100", :x4 => :"300", :x5 => :"500")
+# dim3_warm_start_performance[!,:centers] = ["2","3","4","5"];
 
-CSV.write("results/dim3_optimal_euclidean_performance.csv",dim3_optimal_performance)
-CSV.write("results/dim3_warm_start_euclidean_performance.csv",dim3_warm_start_performance)
+# CSV.write("results/dim3_optimal_euclidean_performance.csv",dim3_optimal_performance)
+# CSV.write("results/dim3_warm_start_euclidean_performance.csv",dim3_warm_start_performance)
 
-dim3_optimal_performance = []
-dim3_warm_start_performance = []
+# dim3_optimal_performance = []
+# dim3_warm_start_performance = []
 
-for J in [20,50,100,300,500]
-    for I in [2,3,4,5]
-        for D = 3
-            points = generate_points(I,J,D, ones(I));
-            centroids, assignment, obj_value = manhattan_optimal_kmenas(points, I,J,D);
-            push!(dim3_optimal_performance, mean_silhouette_score(assignment, counts(assignment), points))
-            centroids, assignment, obj_value = manhattan_warm_start(points, I,J,D);
-            push!(dim3_warm_start_performance, mean_silhouette_score(assignment, counts(assignment), points))
-        end
-    end
-end
+# for J in [20,50,100,300,500]
+#     for I in [2,3,4,5]
+#         for D = 3
+#             points = generate_points(I,J,D, ones(I));
+#             centroids, assignment, obj_value = manhattan_optimal_kmenas(points, I,J,D);
+#             push!(dim3_optimal_performance, mean_silhouette_score(assignment, counts(assignment), points))
+#             centroids, assignment, obj_value = manhattan_warm_start(points, I,J,D);
+#             push!(dim3_warm_start_performance, mean_silhouette_score(assignment, counts(assignment), points))
+#         end
+#     end
+# end
 
-dim3_optimal_performance = rename!(DataFrame(reshape(dim3_optimal_performance, (4,5)), :auto),:x1 => :"20", :x2 => :"50", :x3 => :"100", :x4 => :"300", :x5 => :"500")
-dim3_optimal_performance[!,:centers] = ["2","3","4","5"];
+# dim3_optimal_performance = rename!(DataFrame(reshape(dim3_optimal_performance, (4,5)), :auto),:x1 => :"20", :x2 => :"50", :x3 => :"100", :x4 => :"300", :x5 => :"500")
+# dim3_optimal_performance[!,:centers] = ["2","3","4","5"];
 
-dim3_warm_start_performance = rename!(DataFrame(reshape(dim3_warm_start_performance, (4,5)), :auto),:x1 => :"20", :x2 => :"50", :x3 => :"100", :x4 => :"300", :x5 => :"500")
-dim3_warm_start_performance[!,:centers] = ["2","3","4","5"];
+# dim3_warm_start_performance = rename!(DataFrame(reshape(dim3_warm_start_performance, (4,5)), :auto),:x1 => :"20", :x2 => :"50", :x3 => :"100", :x4 => :"300", :x5 => :"500")
+# dim3_warm_start_performance[!,:centers] = ["2","3","4","5"];
 
-CSV.write("results/dim3_optimal_manhattan_performance.csv",dim3_optimal_performance)
-CSV.write("results/dim3_warm_start_manhattan_performance.csv",dim3_warm_start_performance)
+# CSV.write("results/dim3_optimal_manhattan_performance.csv",dim3_optimal_performance)
+# CSV.write("results/dim3_warm_start_manhattan_performance.csv",dim3_warm_start_performance)
 
-dim3_optimal_performance = []
+# dim3_optimal_performance = []
 
-for J in [20,50,100,300,500]
-    for I in [2,3,4,5]
-        for D = 3
-            points = generate_points(I,J,D, ones(I));
-            km = kmeans(points', I)
-            assignments = km.assignments;
-            push!(dim3_optimal_performance, mean_silhouette_score(assignments, counts(assignments), points))
-        end
-    end
-end
+# for J in [20,50,100,300,500]
+#     for I in [2,3,4,5]
+#         for D = 3
+#             points = generate_points(I,J,D, ones(I));
+#             km = kmeans(points', I)
+#             assignments = km.assignments;
+#             push!(dim3_optimal_performance, mean_silhouette_score(assignments, counts(assignments), points))
+#         end
+#     end
+# end
 
-dim3_optimal_performance = rename!(DataFrame(reshape(dim3_optimal_performance, (4,5)), :auto),:x1 => :"20", :x2 => :"50", :x3 => :"100", :x4 => :"300", :x5 => :"500")
-dim3_optimal_performance[!,:centers] = ["2","3","4","5"];
+# dim3_optimal_performance = rename!(DataFrame(reshape(dim3_optimal_performance, (4,5)), :auto),:x1 => :"20", :x2 => :"50", :x3 => :"100", :x4 => :"300", :x5 => :"500")
+# dim3_optimal_performance[!,:centers] = ["2","3","4","5"];
 
-CSV.write("results/dim3_kmeans_performance.csv",dim3_optimal_performance)
+# CSV.write("results/dim3_kmeans_performance.csv",dim3_optimal_performance)
+
+points = generate_points(3,100,2, ones(3));
+
+@time centroids, assignment, obj_value = manhattan_optimal_kmenas(points, 3,100,2);
+shil = mean_silhouette_score(assignment, counts(assignment), points);
+println("The mean silhouette score for the optimal manhattan kmeans is $shil")
+
+km = kmeans(points', 3)
+assignments = km.assignments;
+shil = mean_silhouette_score(assignments, counts(assignments), points);
+println("The mean silhouette score for the kmeans is $shil")
