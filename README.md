@@ -12,7 +12,7 @@ The code is mainly wirtten in Julia, with some peripheral experimentation in pyt
 - **Results**: some results comparing the warm-start and cold-start algoritmhs to the classical kmeans framework, in low dimensionality spaces
 - **Experimentation.ipynb**: some experimentions and plottings 
 - **Autoencoder.ipynb**: experimentations with dimensionality reduction
-- **Kmeans.jl**: fornulations proposed 
+- **Kmeans.jl**: formulations proposed 
 
 ## License
 
