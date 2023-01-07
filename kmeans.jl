@@ -262,13 +262,13 @@ end
 
 # CSV.write("results/dim3_kmeans_performance.csv",dim3_optimal_performance)
 
-points = generate_points(3,100,2, ones(3));
+# points = generate_points(3,100,2, ones(3));
 
-@time centroids, assignment, obj_value = manhattan_optimal_kmenas(points, 3,100,2);
-shil = mean_silhouette_score(assignment, counts(assignment), points);
-println("The mean silhouette score for the optimal manhattan kmeans is $shil")
+# @time centroids, assignment, obj_value = manhattan_optimal_kmenas(points, 3,100,2);
+# shil = mean_silhouette_score(assignment, counts(assignment), points);
+# println("The mean silhouette score for the optimal manhattan kmeans is $shil")
 
-km = kmeans(points', 3)
-assignments = km.assignments;
-shil = mean_silhouette_score(assignments, counts(assignments), points);
-println("The mean silhouette score for the kmeans is $shil")
+# km = kmeans(points', 3)
+# assignments = km.assignments;
+# shil = mean_silhouette_score(assignments, counts(assignments), points);
+# println("The mean silhouette score for the kmeans is $shil")
