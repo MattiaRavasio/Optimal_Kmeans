@@ -190,12 +190,6 @@ function euclidean_warm_start(points,  I, J, D)
 end
 
 
-# """
-# J is the number of points/record in the dataset
-# I is the number of clusters
-# D is the dimensionality of the points (number of features)
-# # """
-
 # dim3_optimal_performance = []
 # dim3_warm_start_performance = []
 
